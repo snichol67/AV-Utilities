@@ -49,12 +49,15 @@ Prompts the user for release information for lookup on discogs.com. When multipl
 ## dv_encode_prep.py
 ### Usage
 ```bash
-python3 cd_scanner.py
+python3 dv_encode_prep.py input.mkv
 ```
-Prompts the user for release information for lookup on musicbrainz.org. When multiple releases are found, user is prompted to select the correct release.  Once the user chooses a release, the album information is appended to the file catalog_cd.csv.
+#### Arguments
 
-#### Release Information Inputs
+- `input_file`: Path to the input .mkv file containing Dolby Vision layer
 
-- **Barcode**: If input is all digits with 12 or 13 digits assumes barcode
-- **Artist:Title**: If input is in the format Artist:Title, splits the input and queries by artist and title
-- **Catalog Number**: Otherwise, any other string is assumed to be a catalog ID and attempts to query by catalog ID
+#### Output
+- `input_HDR10_READY.mkv`: Same .mkv file stripped of the Dolby Vision enhancement layer, ready for encoding with Handbrake
+
+Analyzes the input file for Dolby Vision enhancement layer, if DV layers are detected, uses ffmpeg to separate video, audio, and subtitle streams.  Then uses dovi_tool to remove the Dolby Vision layer.  Finally mkvmerge to re-mux the audio, video, and subtitle streams into a single mkv file.
+
+The reasoning for this is that the Epson 5050ub projector is only HRD10 capable, so we remove the Dolby Vision so that the display the movie with the proper tone mappings for HRD.  With DV present, the projector may not be able to display correctly.
