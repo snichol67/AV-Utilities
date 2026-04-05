@@ -187,7 +187,7 @@ class ReleaseInfo:
             print(f"Searching Discogs for release with catalog number: {key}")
             data = self.search_discogs_by_catno(key)
         
-        relsease = None
+        release = None
         # If we got results, return the first one (or prompt user if multiple)
         if (data and data.get("results")):
             releases = data.get("results", [])
@@ -215,7 +215,7 @@ class ReleaseInfo:
 
         # If we found a release, get the full details and initialize the record
         if release:
-            print(json.dumps(release, indent=2))  # Print raw master data for debugging
+            # print(json.dumps(release, indent=2))  # Print raw master data for debugging
             record = self.get_discogs_by_id(release.get("id"))
             self.init_with_discogs_data(record)
             self.print_info()
